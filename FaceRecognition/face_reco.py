@@ -26,10 +26,10 @@ class FaceRecognition:
             print(imagePath)
             PIL_img = Image.open(imagePath).convert('L') 
             img_numpy = np.array(PIL_img,'uint8')
-            name= int(os.path.split(imagePath)[-1].split(".")[1])
+            name= os.path.split(imagePath)[-1].split(".")[1]
             if name not in data.values():
-                data[id] = name
                 id = id+1
+                data[id] = name
             faces = self.detector.detectMultiScale(img_numpy)
             for (x,y,w,h) in faces:
                 faceSamples.append(img_numpy[y:y+h,x:x+w])
@@ -47,7 +47,6 @@ class FaceRecognition:
        self.names = pickle.load(open("FaceRecognition/train/data.pkl" , "rb"))
        self.recognizer.read('FaceRecognition/train/trainer.yml')     
     def predict(self,img):
-        names = self.names
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         faces = self.detector.detectMultiScale( 
             gray,
@@ -61,9 +60,10 @@ class FaceRecognition:
 
             id, confidence = self.recognizer.predict(gray[y:y+h,x:x+w])
             value = 'unknown'
-            if (confidence < 100):
+            if (confidence < 80):
                 confidence = "  {0}%".format(round(100 - confidence))
-                value = names[id] 
+                print(id)
+                value = self.names[id] 
             else:
                 confidence = "  {0}%".format(round(100 - confidence)) 
             cv2.putText(img, str(id), (x+5,y-5), self.font, 1, (255,255,255), 2)

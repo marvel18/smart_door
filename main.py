@@ -10,7 +10,7 @@ class Main:
         self.fr = FaceRecognition()
     def load_data(self):
         try:
-            self.df = pd.read_csv("data.csv")
+            self.df = pd.read_csv("data.csv",index_col=0)
         except :
             self.df =pd.DataFrame(columns=  ["Date and Time" , "Name" ,"Confidence" , "Temperature" ,"fever" ])
     def run(self):
