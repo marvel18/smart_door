@@ -23,7 +23,6 @@ class FaceRecognition:
         ids = []
         id = 0
         for imagePath in imagePaths:
-            print(imagePath)
             PIL_img = Image.open(imagePath).convert('L') 
             img_numpy = np.array(PIL_img,'uint8')
             name= os.path.split(imagePath)[-1].split(".")[1]
@@ -60,13 +59,10 @@ class FaceRecognition:
 
             id, confidence = self.recognizer.predict(gray[y:y+h,x:x+w])
             value = 'unknown'
-            if (confidence < 80):
-                confidence = "  {0}%".format(round(100 - confidence))
-                print(id)
+            if (confidence < 100 and id in self.names.keys()):
                 value = self.names[id] 
-            else:
-                confidence = "  {0}%".format(round(100 - confidence)) 
-            cv2.putText(img, str(id), (x+5,y-5), self.font, 1, (255,255,255), 2)
+            confidence = "  {0}%".format(round(100 - confidence))    
+            cv2.putText(img, str(value), (x+5,y-5), self.font, 1, (255,255,255), 2)
             cv2.putText(img, str(confidence), (x+5,y+h-5), self.font, 1, (255,255,0), 1)  
             return value , confidence , img
         return None,None,img 

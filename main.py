@@ -19,6 +19,8 @@ class Main:
         self.recogonize()    
     def start_camera(self):
         self.cam = cv2.VideoCapture(0)
+    def stop_camera(self):
+        self.cam.release()
     def train(self):
            self.fr.train()
            self.fr.load()
@@ -41,7 +43,6 @@ class Main:
                 return False
             cv2.imshow("camera " , img)
         return False    
-     
      
 if __name__ == "__main__":
     app = Main()
