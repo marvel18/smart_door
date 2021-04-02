@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from configparser import ConfigParser
 import cv2
 from FaceRecognition.face_reco import FaceRecognition
 import os
@@ -10,7 +11,21 @@ class App:
     DATA_URL = 'data.csv'
     
     def  __init__(self):
-        pass
+        self.conf = ConfigParser()
+        self.conf.read('config.ini')
+        if(self.authenticate()):
+            self.main() 
+    @st.cache(suppress_st_warning=True)        
+    def authenticate(self):
+        login_page = st.empty()
+        password = login_page.text_input('Enter password',type = 'password')
+        if(self.conf['LOGIN']['password'] == password):
+            login_page.empty()
+            return True
+        elif(password != ''):
+            st.warning('incorrect password')
+        st.caching.clear_cache()
+        return False   
     def load_data(self , nrows):
         data = pd.read_csv(self.DATA_URL, nrows=nrows)
         lowercase = lambda x: str(x).lower()
@@ -38,8 +53,8 @@ class App:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             frame.image(img)        
     def settings(self):
-        my_expander = st.beta_expander("Add Face Data", expanded=False)
-        with my_expander :
+        add_face_expander = st.beta_expander("Add Face Data", expanded=False)
+        with add_face_expander :
             name = st.text_input('Enter Name :')
             if(name != ''):
                 options = st.multiselect('get facedata from ',['upload' , 'picamera'])
@@ -68,8 +83,7 @@ class App:
                         progress_bar1.empty()
                         info.empty()    
                         picamera.success(name + 's face added successfully')
-                        frame.image([])
-                upload_expand = st.beta_container()            
+                        frame.image([])       
                 if 'upload' in options:
                     uploaded_files = st.file_uploader("Choose a image file", type="jpg",accept_multiple_files=True)
                     progress_bar2= st.progress(0)
@@ -93,8 +107,35 @@ class App:
                     if c!=0 :
                         progress_bar2.empty()            
                         st.success(name + 's facedata uploaded successfully')
-                                            
-    def main(self):
+        ce= st.beta_expander("Configurations" , expanded = False)
+        with ce :
+            ce.subheader("FACE RECOGNITION")
+            face_config = self.conf['RECO_CONF']
+            face_config['min_confidence'] =str(ce.slider('THRESHOLD CONFIDENCE' , 0 , 100 , int(face_config['min_confidence'])))
+            face_config['no_face'] = str(ce.number_input('NO FACES DETECT AT A TIME ',value = int(face_config['no_face'])))
+            ce.subheader("SENSORS")
+            sensor_config = self.conf['SENSOR_CONF']
+            sensor_config['max_temp'] =str(ce.slider('THRESHOLD TEMPERATURE' , 0 , 150, int(sensor_config['max_temp'])))
+            sensor_config['pump_time'] = str(ce.number_input('MOTOR PUMP TIME(s)',value = int(sensor_config['pump_time'])))
+            distance_sensor_config = self.conf['DISTANCE_SENSOR']
+            distance_sensor_config['trig_pin'] = str(ce.number_input('TRIGGER PIN ',value = int(distance_sensor_config['trig_pin'])))
+            distance_sensor_config['echo_pin'] = str(ce.number_input('ECHO PIN ',value = int(distance_sensor_config['echo_pin'])))
+        se=st.beta_expander("Security Settings" , expanded = False)
+        with se :
+            login_config = self.conf['LOGIN']
+            password = str(se.text_input('Enter Password ',type='password',value = ''))
+            if( password == login_config['password'] ):
+                newpass = str(se.text_input('Enter New Password ',type='password'))
+                retype_newpass = str(se.text_input('Retype New Password ',type='password'))
+                if(se.button('submit') and newpass == retype_newpass):
+                    login_config['password'] = newpass
+                    se.success("Password changed succesfully")
+            elif(password != ''):
+                se.warning("incorrect password")        
+        with open('config.ini' , 'w') as conf :
+            self.conf.write(conf)
+                                                               
+    def main(self): 
         st.title("Smart Door")
         nav  = st.sidebar.radio("Navigation" , ["Home" , "Sensor" , "Camera",'Settings'])
         if nav == "Home":
@@ -105,7 +146,7 @@ class App:
             self.live_cam()
         elif( nav == 'Settings'):
             self.settings()    
-            
-            
+        if(st.sidebar.button("logout")):
+            st.caching.clear_cache()
 if __name__ == "__main__":
-    App().main()
+    App()   
