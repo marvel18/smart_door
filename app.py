@@ -147,15 +147,27 @@ class App:
         status = self.conf["STATUS"]
         content,_,_,_=st.sidebar.beta_columns([.5,1,1,1])
         with content:  
-            running = st.select_slider("POWER",['OFF','ON'],status["running"])
+            running = st.select_slider("FACE_LOCK",['OFF','ON'],status["face_lock"])
             if running == 'ON':
-                if status["running"] == "OFF":
+                if status["face_lock"] == "OFF":
                     self.lock_running = LOCK()
                     self.lock_running.start()
-                    status["running"] = "ON"
+                    status["face_lock"] = "ON"
             else:
                 self.lock_running.stop()
-                status["running"] = "OFF"
+                status["face_lock"] = "OFF"
+        content,_,_,_=st.sidebar.beta_columns([.5,1,1,1])
+        with content:  
+            running = st.select_slider("AUTO SANITISE",['OFF','ON'],status["auto_sanitize"])
+            if running == 'ON':
+                if status["auto_sanitize"] == "OFF":
+                    self.auto_santize = Sanitize()
+                    self.auto_santize.start()
+                    status["auto_sanitize"] = "ON"
+            else:
+                self.auto_sanitize.stop()
+                status["auto_sanitize"] = "OFF"
+                        
             with open('config.ini' , 'w') as conf :
                 self.conf.write(conf)               
         nav  = st.sidebar.radio("Navigation" , ["Home" , "Sensor" , "Camera",'Settings'])

@@ -3,7 +3,7 @@ from FaceRecognition.face_reco import FaceRecognition
 import cv2
 from datetime import datetime
 from configparser import ConfigParser
-import Rpi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 from threading import Thread
 
@@ -66,7 +66,6 @@ class LOCK(Thread):
                 self.unlock()
             if cv2.waitKey(10) == 27:
                 return False
-            cv2.imshow("camera " , img)
         return False    
   
 class Sanitize(Thread):
