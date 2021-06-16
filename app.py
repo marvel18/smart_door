@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 from configparser import ConfigParser
 import cv2
@@ -116,8 +117,13 @@ class App:
             ce.subheader("SENSORS")
             sensor_config = self.conf['SENSOR_CONF']
             sensor_config['max_temp'] =str(ce.slider('THRESHOLD TEMPERATURE' , 0 , 150, int(sensor_config['max_temp'])))
-            sensor_config['pump_time'] = str(ce.number_input('MOTOR PUMP TIME(s)',value = int(sensor_config['pump_time'])))
+            pump_config = self.conf['PUMP_CONF']
+            pump_config['pump_time'] = str(ce.number_input('MOTOR PUMP TIME(s)',value = int(pump_config['pump_time'])))
+            pump_config['pump_pin'] = str(ce.number_input('MOTOR PUMP PIN',value = int(pump_config['pump_pin'])))
+            lock_config = self.conf['LOCK_CONF']
+            lock_config['lock_pin'] = str(ce.number_input('LOCK PIN',value = int(lock_config['lock_pin'])))
             distance_sensor_config = self.conf['DISTANCE_SENSOR']
+            distance_sensor_config['min_dist'] = str(ce.slider('MINIMUM DISTANCE(cm)' , 0 , 100 , int(distance_sensor_config['min_dist'])))
             distance_sensor_config['trig_pin'] = str(ce.number_input('TRIGGER PIN ',value = int(distance_sensor_config['trig_pin'])))
             distance_sensor_config['echo_pin'] = str(ce.number_input('ECHO PIN ',value = int(distance_sensor_config['echo_pin'])))
         se=st.beta_expander("Security Settings" , expanded = False)
@@ -137,6 +143,17 @@ class App:
                                                                
     def main(self): 
         st.title("Smart Door")
+        status = self.conf["STATUS"]
+        content,_,_,_=st.sidebar.beta_columns([.5,1,1,1])
+        with content:  
+            running = st.select_slider("POWER",['OFF','ON'],status["running"])
+            if running == 'ON':
+                if status["running"] == "OFF":
+                    status["running"] = "ON"
+            else:
+                status["running"] = "OFF"
+            with open('config.ini' , 'w') as conf :
+                self.conf.write(conf)               
         nav  = st.sidebar.radio("Navigation" , ["Home" , "Sensor" , "Camera",'Settings'])
         if nav == "Home":
             self.home()
