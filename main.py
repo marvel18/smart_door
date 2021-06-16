@@ -97,12 +97,12 @@ class Sanitize(Thread):
         self.check_distance()    
     def check_distance(self):
         while(self.running):
-            GPIO.output(GPIO_TRIG, GPIO.HIGH)
+            GPIO.output(self.trig_pin, GPIO.HIGH)
             time.sleep(0.00001) 
-            GPIO.output(GPIO_TRIG, GPIO.LOW) 
-            while GPIO.input(GPIO_ECHO)==0: 
+            GPIO.output(self.trig_pin, GPIO.LOW) 
+            while GPIO.input(self.echo_pin)==0: 
                 start_time = time.time() 
-            while GPIO.input(GPIO_ECHO)==1: 
+            while GPIO.input(self.echo_pin)==1: 
                 Bounce_back_time = time.time() 
 
             pulse_duration = Bounce_back_time - start_time 
