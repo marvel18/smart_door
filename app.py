@@ -7,6 +7,7 @@ from FaceRecognition.face_reco import FaceRecognition
 import os
 import numpy as np
 import time
+from main import *
 class App:
     DATE_COLUMN = 'date and time'
     DATA_URL = 'data.csv'
@@ -149,8 +150,11 @@ class App:
             running = st.select_slider("POWER",['OFF','ON'],status["running"])
             if running == 'ON':
                 if status["running"] == "OFF":
+                    self.lock_running = LOCK()
+                    self.lock_running.start()
                     status["running"] = "ON"
             else:
+                self.lock_running.stop()
                 status["running"] = "OFF"
             with open('config.ini' , 'w') as conf :
                 self.conf.write(conf)               
