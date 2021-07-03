@@ -7,8 +7,6 @@ import RPi.GPIO as GPIO
 import time
 from threading import Thread
 
-GPIO.setmode(GPIO.BCM)
-
 class LOCK(Thread):
     def __init__(self):
         self.running = True
@@ -20,8 +18,9 @@ class LOCK(Thread):
         self.init_RPi()
     def init_RPi(self):
         self.lock_conf = self.conf['LOCK_CONF']
-        self.lock_pin  = self.lock['lock_pin']
-        self.lock_in_pin  = self.lock['lock_in_pin']
+        self.lock_pin  = int(self.lock_conf['lock_pin'])
+        self.lock_in_pin  = int(self.lock_conf['lock_in_pin'])
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.lock_pin,GPIO.OUT)
         GPIO.setup(self.lock_in_pin,GPIO.IN)    
     def load_data(self):
@@ -75,9 +74,9 @@ class Sanitize(Thread):
         self.init_RPi()
     def init_RPi(self):
         self.dist_sensor_conf = self.conf['DISTANCE_SENSOR']
-        self.trig_pin = self.dist_sensor_conf['trig_pin']
-        self.echo_pin = self.dist_sensor_conf['echo_pin']
-        self.min_dist = self.dist_sensor_conf['min_dist']
+        self.trig_pin = int(self.dist_sensor_conf['trig_pin'])
+        self.echo_pin = int(self.dist_sensor_conf['echo_pin'])
+        self.min_dist = int(self.dist_sensor_conf['min_dist'])
         self.pump_conf = self.conf['PUMP_CONF']
         self.pump_time = self.pump_conf['pump_time']
         self.pump_pin = self.pump_conf['pump_pin']

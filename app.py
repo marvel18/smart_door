@@ -29,7 +29,10 @@ class App:
         st.caching.clear_cache()
         return False   
     def load_data(self , nrows):
-        data = pd.read_csv(self.DATA_URL, nrows=nrows)
+        try:    
+            data = pd.read_csv(self.DATA_URL, nrows=nrows)
+        except :
+            data =pd.DataFrame(columns=  ["Date and Time" , "Name" ,"Confidence" , "Temperature" ,"fever" ])    
         lowercase = lambda x: str(x).lower()
         data.rename(lowercase, axis='columns', inplace=True)
         data[self.DATE_COLUMN] = pd.to_datetime(data[self.DATE_COLUMN])
@@ -144,13 +147,15 @@ class App:
                                                                
     def main(self): 
         st.title("Smart Door")
+        """
+        self.lock_running = LOCK()
+        self.auto_santize = Sanitize()
         status = self.conf["STATUS"]
         content,_,_,_=st.sidebar.beta_columns([.5,1,1,1])
         with content:  
             running = st.select_slider("FACE_LOCK",['OFF','ON'],status["face_lock"])
             if running == 'ON':
                 if status["face_lock"] == "OFF":
-                    self.lock_running = LOCK()
                     self.lock_running.start()
                     status["face_lock"] = "ON"
             else:
@@ -161,7 +166,7 @@ class App:
             running = st.select_slider("AUTO SANITISE",['OFF','ON'],status["auto_sanitize"])
             if running == 'ON':
                 if status["auto_sanitize"] == "OFF":
-                    self.auto_santize = Sanitize()
+                    
                     self.auto_santize.start()
                     status["auto_sanitize"] = "ON"
             else:
@@ -169,7 +174,8 @@ class App:
                 status["auto_sanitize"] = "OFF"
                         
             with open('config.ini' , 'w') as conf :
-                self.conf.write(conf)               
+                self.conf.write(conf) 
+                """             
         nav  = st.sidebar.radio("Navigation" , ["Home" , "Sensor" , "Camera",'Settings'])
         if nav == "Home":
             self.home()
