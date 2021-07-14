@@ -1,10 +1,10 @@
 version: '2'
 
 volumes:
-  - shared_folder:
-      external: true
-  - ./config:
-      external: true
+  shared_folder:
+    external: true
+  ./config:
+    external: true
 services:
   server:
     build: ./AppData/server
