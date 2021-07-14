@@ -3,7 +3,8 @@ version: '2'
 volumes:
   - shared_folder:
       external: true
-  - ./config/ : /usr/src/appdata
+  - ./config:
+      external: true
 services:
   server:
     build: ./AppData/server
@@ -21,6 +22,7 @@ services:
     privileged: true
     network_mode: host
     volumes:
+      - ./config:/usr/src/appdata/
       - shared_folder:/usr/src/appdata
       - shared_folder:/usr/src/appdata/dataset
   auto_sanitize:
