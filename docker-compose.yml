@@ -2,7 +2,7 @@ version: '2'
 
 volumes:
   shared_folder:
-    - external: true
+      external: true
 services:
   server:
     build: ./App/server
