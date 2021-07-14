@@ -11,18 +11,18 @@ services:
     ports:
         - 8501:8501
     volumes:
-      - ./data/appdata:/usr/src/appdata
+      - './data/appdata:/usr/src/appdata'
   smart_lock:
     build: ./App/smart_lock
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-      - ./data/appdata:/usr/src/appdata
+      - './data/appdata:/usr/src/appdata'
   auto_sanitize:
     build: ./App/auto_sanitize
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-      - ./data/appdata:/usr/src/appdata
+      - './data/appdata:/usr/src/appdata'
