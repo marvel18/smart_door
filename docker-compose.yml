@@ -1,7 +1,5 @@
 version: '2'
 
-volumes:
-  ./data/appdata:
 services:
   server:
     build: ./App/server
