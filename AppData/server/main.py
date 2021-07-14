@@ -7,7 +7,6 @@ from FaceRecognition.face_reco import FaceRecognition
 import os
 import numpy as np
 import time
-from main import *
 class App:
     DATE_COLUMN = 'date and time'
     DATA_URL = 'data.csv'
@@ -64,7 +63,7 @@ class App:
             if(name != ''):
                 options = st.multiselect('get facedata from ',['upload' , 'picamera'])
                 cwd = os.path.abspath(os.path.dirname(__file__))
-                path = os.path.abspath(os.path.join(cwd, "FaceRecognition/dataset"))
+                path = os.path.abspath(os.path.join(cwd, "/usr/src/appdata/dataset/"))
                 face_detector = cv2.CascadeClassifier('FaceRecognition/haarcascade_frontalface_default.xml')
                 picamera= st.beta_container()
                 if 'picamera' in options:

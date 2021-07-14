@@ -35,16 +35,16 @@ class FaceRecognition:
                 ids.append(id)
 
         return faceSamples,ids , data
-    def train(self , path = 'FaceRecognition/dataset'):
+    def train(self , path = '/usr/src/appdata/dataset'):
         print ("\n [INFO] Training faces. It will take a few seconds. Wait ...")
         faces,ids , data = self.getImagesAndLabels(path)
         self.recognizer.train(faces, np.array(ids))
-        pickle.dump(data  , open("FaceRecognition/train/data.pkl" , "wb"))
-        self.recognizer.write("FaceRecognition/train/train_data.yml")
+        pickle.dump(data  , open("/usr/src/appdata/data.pkl" , "wb"))
+        self.recognizer.write("/usr/src/appdata/train_data.yml")
         print("Training completed")
     def load(self):
-       self.names = pickle.load(open("FaceRecognition/train/data.pkl" , "rb"))
-       self.recognizer.read('FaceRecognition/train/trainer.yml')     
+       self.names = pickle.load(open("/usr/src/appdata/data.pkl" , "rb"))
+       self.recognizer.read('/usr/src/appdata/train_data.yml')     
     def predict(self,img):
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         faces = self.detector.detectMultiScale( 
