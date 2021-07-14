@@ -26,4 +26,4 @@ COPY . ./
 ENV UDEV=1
 
 # main.py will run when container starts up on the device
-CMD ["python","-m","streamlit","main.py"]
+CMD ["python","-m","streamlit","run","main.py"]
