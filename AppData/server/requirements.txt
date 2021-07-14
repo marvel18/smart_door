@@ -1,6 +1,6 @@
 configparser==5.0.2
 DateTime==4.3
-streamlit==0.84.1
+streamlit
 numpy==1.21.0
-opencv-contrib-python==4.5.3.56
-opencv-python==4.5.3.56
+opencv-python
+opencv-contrib-python
