@@ -2,8 +2,8 @@ version: '2'
 
 volumes:
   - shared_folder:
-    - ./config/ : /usr/src/appdata
-    - external: true
+      external: true
+  - ./config/ : /usr/src/appdata
 services:
   server:
     build: ./AppData/server
