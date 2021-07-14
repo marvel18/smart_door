@@ -1,7 +1,8 @@
 version: '2'
 
 volumes: 
-  - ./data/appdata:
+  - data:
+      external: true
 services:
   server:
     build: ./App/server
@@ -11,18 +12,18 @@ services:
     ports:
         - 8501:8501
     volumes:
-      - './data/appdata:/usr/src/appdata'
+      - data:/usr/src/appdata
   smart_lock:
     build: ./App/smart_lock
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-      - './data/appdata:/usr/src/appdata'
+      - data:/usr/src/appdata
   auto_sanitize:
     build: ./App/auto_sanitize
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-      - './data/appdata:/usr/src/appdata'
+      - data:/usr/src/appdata
