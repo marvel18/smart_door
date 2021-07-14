@@ -20,7 +20,6 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ./config:/usr/src/appdata/
       - shared_folder:/usr/src/appdata
       - shared_folder:/usr/src/appdata/dataset
   auto_sanitize:
