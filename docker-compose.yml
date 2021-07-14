@@ -1,5 +1,7 @@
 version: '2'
 
+volumes: 
+  - /usr/src/appdata
 services:
   server:
     build: ./App/server
