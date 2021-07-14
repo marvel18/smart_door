@@ -13,8 +13,6 @@ EXPOSE 8501
 # Copy requirements.txt first for better cache on later pushes
 COPY requirements.txt requirements.txt
 
-COPY config.ini /usr/src/appdata/
-
 RUN pip install --upgrade pip
 
 RUN apt update && apt install gcc g++
@@ -23,6 +21,8 @@ RUN pip install -r requirements.txt
 
 # This will copy all files in our root to the working  directory in the container
 COPY . ./
+
+RUN mkdir /usr/src/appdata && cp config.ini /usr/src/appdata/
 
 # Enable udevd so that plugged dynamic hardware devices show up in our container.
 ENV UDEV=1
