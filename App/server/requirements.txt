@@ -4,3 +4,4 @@ streamlit
 numpy==1.21.0
 opencv-python
 opencv-contrib-python
+PIL
