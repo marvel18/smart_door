@@ -13,7 +13,7 @@ EXPOSE 8501
 # Copy requirements.txt first for better cache on later pushes
 COPY requirements.txt requirements.txt
 
-COPY ./config.ini /usr/src/appdata/
+COPY config.ini /usr/src/appdata/
 
 RUN pip install --upgrade pip
 
