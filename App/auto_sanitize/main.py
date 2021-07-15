@@ -11,7 +11,7 @@ class Sanitize():
         self.trig_pin = int(self.dist_sensor_conf['trig_pin'])
         self.echo_pin = int(self.dist_sensor_conf['echo_pin'])
         self.min_dist = int(self.dist_sensor_conf['min_dist'])
-        self.pump_conf = int(self.conf['PUMP_CONF'])
+        self.pump_conf = self.conf['PUMP_CONF']
         self.pump_time = int(self.pump_conf['pump_time'])
         self.pump_pin = int(self.pump_conf['pump_pin'])
         GPIO.setwarnings(False)
