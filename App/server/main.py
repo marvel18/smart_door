@@ -85,6 +85,7 @@ class App:
                                 cv2.imwrite(loc, gray[y:y+h,x:x+w])
                             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)    
                             frame.image(img)
+                            cv2.waitKey(1)
                         progress_bar1.empty()
                         info.empty()    
                         picamera.success(name + 's face added successfully')
