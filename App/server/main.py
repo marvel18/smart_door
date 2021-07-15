@@ -10,7 +10,6 @@ import time
 class App:
     DATE_COLUMN = 'date and time'
     DATA_URL = 'data.csv'
-    
     def  __init__(self):
         self.conf = ConfigParser()
         self.conf.read('config.ini')
@@ -45,8 +44,9 @@ class App:
     def live_cam(self):
         fr = FaceRecognition()
         with st.spinner("Training Model"):
-            fr.train()
-            fr.load()
+            if(not fr.train()):
+                st.error("Training failed")
+                return
             fr.stopcam()
         cam =cv2.VideoCapture(0)    
         st.balloons()    
@@ -57,7 +57,6 @@ class App:
             name , confidence , img  = fr.predict(img)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             frame.image(img)
-            cv2.waitKey(1)        
     def settings(self):
         add_face_expander = st.beta_expander("Add Face Data", expanded=False)
         with add_face_expander :
@@ -77,8 +76,9 @@ class App:
                         while count<30:
                             ret , img  = cam.read()
                             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                            faces = face_detector.detectMultiScale(gray, 1.3, 5)
-                            for (x,y,w,h) in faces:
+                            faces = face_detector.detectMultiScale(gray, 1.5, 5)
+                            if(len(faces)!=0):
+                                x,y,w,h = faces[0]
                                 cv2.rectangle(img, (x,y), (x+w,y+h), (255,0,0), 2)
                                 count += 1
                                 progress_bar1.progress((count/30))
@@ -90,7 +90,8 @@ class App:
                         progress_bar1.empty()
                         info.empty()    
                         picamera.success(name + 's face added successfully')
-                        frame.image([])       
+                        frame.image([])
+                        cv2.waitKey(10)       
                 if 'upload' in options:
                     uploaded_files = st.file_uploader("Choose a image file", type="jpg",accept_multiple_files=True)
                     progress_bar2= st.progress(0)
