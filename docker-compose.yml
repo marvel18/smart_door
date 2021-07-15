@@ -1,7 +1,10 @@
 version: '2'
 
 volumes:
-  shared_folder:./data/appdata:/usr/src/appdata
+  shared_folder:
+    type:bind
+    source:./data/appdata
+    target:/usr/src/appdata
 services:
   server:
     build: ./App/server
