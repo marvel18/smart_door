@@ -56,7 +56,8 @@ class App:
             ret  , img = cam.read()
             name , confidence , img  = fr.predict(img)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            frame.image(img)        
+            frame.image(img)
+            cv2.waitKey(1)        
     def settings(self):
         add_face_expander = st.beta_expander("Add Face Data", expanded=False)
         with add_face_expander :
