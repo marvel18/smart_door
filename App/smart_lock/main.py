@@ -22,6 +22,7 @@ class LOCK():
         self.lock_in_pin  = int(self.lock_conf['lock_in_pin'])
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.lock_pin,GPIO.OUT)
+        GPIO.output(self.lock_pin,GPIO.HIGH)
         GPIO.setup(self.lock_in_pin,GPIO.IN)    
     def load_data(self):
         try:
@@ -50,12 +51,13 @@ class LOCK():
         print(self.df)
         self.df.to_csv("data.csv")
     def unlock(self):
-        GPIO.output(self.lock_pin,GPIO.HIGH)
-        while GPIO.input(self.lock_in_pin)==0:
-            pass
-        time.sleep(5)
         GPIO.output(self.lock_pin,GPIO.LOW)
-        self.recogonize()
+        while GPIO.input(self.lock_in_pin)==0:
+            continue
+        time.sleep(5)
+        while GPIO.input(self.lock_in_pin)==0:
+            continue
+        GPIO.output(self.lock_pin,GPIO.HIGH)
     def recogonize(self):     
         while(self.running):
             ret  , img = self.cam.read()
@@ -63,7 +65,7 @@ class LOCK():
             if(name  != None and name !="unknown"):
                 self.saveData(name,confidence)
                 self.unlock()
-            if cv2.waitKey(10) == 27:
+            if cv2.waitKey(1) == 27:
                 return False
         return False    
   
