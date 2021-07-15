@@ -18,7 +18,7 @@ class Sanitize():
         self.setupRpiPin(self.pump_pin)
         self.setupRpiPin(self.trig_pin)
         self.setupRpiPin(self.echo_pin,GPIO.IN)
-    def setupRpiPin(pin,method=GPIO.OUT,setvalue=GPIO.LOW):
+    def setupRpiPin(self,pin,method=GPIO.OUT,setvalue=GPIO.LOW):
         GPIO.setup(pin,method)
         if method==GPIO.OUT :
             GPIO.output(pin,setvalue)    
