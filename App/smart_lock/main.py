@@ -20,6 +20,7 @@ class LOCK():
         self.lock_conf = self.conf['LOCK_CONF']
         self.lock_pin  = int(self.lock_conf['lock_pin'])
         self.lock_in_pin  = int(self.lock_conf['lock_in_pin'])
+        GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.lock_pin,GPIO.OUT)
         GPIO.output(self.lock_pin,GPIO.HIGH)
@@ -42,6 +43,7 @@ class LOCK():
     def train(self):
            self.fr.train()
            self.fr.load()
+           self.fr.stopcam()
     def saveData(self,name , confidence):
         if not self.save_data :
             return

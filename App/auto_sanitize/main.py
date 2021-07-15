@@ -14,6 +14,7 @@ class Sanitize():
         self.pump_conf = int(self.conf['PUMP_CONF'])
         self.pump_time = int(self.pump_conf['pump_time'])
         self.pump_pin = int(self.pump_conf['pump_pin'])
+        GPIO.setwarnings(False)
         self.setupRpiPin(self.pump_pin)
         self.setupRpiPin(self.trig_pin)
         self.setupRpiPin(self.echo_pin,GPIO.IN)

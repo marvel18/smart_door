@@ -43,11 +43,12 @@ class App:
         f.table(data[['name' , 'confidence' , 'temperature' , 'fever' , 'date and time']])
         st.button('refresh')    
     def live_cam(self):
-        cam =cv2.VideoCapture(0)
         fr = FaceRecognition()
         with st.spinner("Training Model"):
             fr.train()
             fr.load()
+            fr.stopcam()
+        cam =cv2.VideoCapture(0)    
         st.balloons()    
         st.subheader('Live Cam')
         frame = st.image([])
