@@ -2,7 +2,6 @@ version: '2'
 
 volumes:
   shared_folder:
-    external: true
 services:
   server:
     build: ./App/server
@@ -12,18 +11,18 @@ services:
     ports:
         - 8501:8501
     volumes:
-      - shared_folder:/usr/src/app
+      - shared_folder:./data
   smart_lock:
     build: ./App/smart_lock
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-        - shared_folder:/usr/src/app
+        - shared_folder:./data
   auto_sanitize:
     build: ./App/auto_sanitize
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-      - shared_folder:/usr/src/app
+      - shared_folder:./data
