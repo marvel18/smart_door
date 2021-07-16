@@ -12,18 +12,18 @@ services:
     ports:
         - 8501:8501
     volumes:
-      - shared_folder:/usr/src/App
+      - shared_folder:/usr/src/app
   smart_lock:
     build: ./App/smart_lock
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-        - shared_folder:/usr/src/appdata
+        - shared_folder:/usr/src/app
   auto_sanitize:
     build: ./App/auto_sanitize
     restart: on-failure
     privileged: true
     network_mode: host
     volumes:
-      - shared_folder:/usr/src/appdata
+      - shared_folder:/usr/src/app
