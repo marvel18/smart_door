@@ -15,7 +15,7 @@ class LOCK():
         self.load_data()
         self.fr = FaceRecognition()
         self.conf = ConfigParser()
-        self.conf.read('/usr/src/appdata/config.ini')
+        self.conf.read('/usr/src/app/data/config.ini')
         self.init_RPi()
     def init_RPi(self):
         self.lock_conf = self.conf['LOCK_CONF']

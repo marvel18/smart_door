@@ -12,7 +12,7 @@ services:
     ports:
         - 8501:8501
     volumes:
-      - shared_folder:/usr/src/appdata
+      - shared_folder:/usr/src/App
   smart_lock:
     build: ./App/smart_lock
     restart: on-failure

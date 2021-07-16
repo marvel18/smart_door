@@ -4,7 +4,7 @@ import time
 class Sanitize():
     def __init__(self):
         self.conf = ConfigParser()
-        self.conf.read('./config.ini')
+        self.conf.read('/usr/src/app/data/config.ini')
         self.init_RPi()
     def init_RPi(self):
         self.dist_sensor_conf = self.conf["DISTANCE_SENSOR"]
