@@ -12,7 +12,7 @@ services:
     ports:
       - '8501:8501'
     volumes:
-      - 'shared_folder:/usr/src/appdata'
+      - 'shared_folder:./data/'
   smart_lock:
     build:
       context: ./App/smart_lock
@@ -20,7 +20,7 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - 'shared_folder:/usr/src/appdata'
+      - 'shared_folder:./data/'
   auto_sanitize:
     build:
       context: ./App/auto_sanitize
@@ -28,4 +28,4 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - 'shared_folder:/usr/src/appdata'
+      - 'shared_folder:./data/'
