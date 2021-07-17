@@ -5,9 +5,8 @@ from datetime import datetime
 from configparser import ConfigParser
 import RPi.GPIO as GPIO
 import time
-from threading import Thread
-
-class LOCK():
+class LOCK:
+    path = "./data/"
     def __init__(self):
         self.running = True
         self.locked = False
@@ -15,7 +14,7 @@ class LOCK():
         self.load_data()
         self.fr = FaceRecognition()
         self.conf = ConfigParser()
-        self.conf.read('/usr/src/app/data/config.ini')
+        self.conf.read(self.path+'/config.ini')
         self.init_RPi()
     def init_RPi(self):
         self.lock_conf = self.conf['LOCK_CONF']
@@ -28,7 +27,7 @@ class LOCK():
         GPIO.setup(self.lock_in_pin,GPIO.IN)    
     def load_data(self):
         try:
-            self.df = pd.read_csv("/usr/src/appdata/data.csv",index_col=0)
+            self.df = pd.read_csv(self.path+"/data.csv",index_col=0)
         except :
             self.df =pd.DataFrame(columns=  ["Date and Time" , "Name" ,"Confidence" , "Temperature" ,"fever" ])
     def run(self):
@@ -56,7 +55,7 @@ class LOCK():
         now = datetime.now()
         self.df = self.df.append({"Date and Time":now , 'Name' :name  , 'Confidence' : confidence},ignore_index=True)
         print(self.df)
-        self.df.to_csv("data.csv")
+        self.df.to_csv(self.path+"data.csv")
     def unlock(self):
         self.locked=False
         GPIO.output(self.lock_pin,GPIO.LOW)

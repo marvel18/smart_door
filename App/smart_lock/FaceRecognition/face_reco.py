@@ -60,7 +60,6 @@ class FaceRecognition:
         for(x,y,w,h) in faces:
 
             cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
-
             id, confidence = self.recognizer.predict(gray[y:y+h,x:x+w])
             value = 'unknown'
             if ((confidence < 100 )and (id in self.names.keys())):
