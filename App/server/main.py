@@ -13,7 +13,7 @@ class App:
     path = "/usr/src/appdata/"
     def  __init__(self):
         self.conf = ConfigParser()
-        self.conf.read('config.ini')
+        self.conf.read(self.path+'config.ini')
         if(self.authenticate()):
             self.main() 
     @st.cache(suppress_st_warning=True)        

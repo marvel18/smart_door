@@ -10,6 +10,7 @@ class FaceRecognition:
     train_data = dict() 
     names = dict()
     def __init__(self):
+        print(self.path)
         self.cam = cv2.VideoCapture(0)
         self.detector = cv2.CascadeClassifier('FaceRecognition/haarcascade_frontalface_default.xml') 
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
