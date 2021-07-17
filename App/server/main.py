@@ -10,6 +10,7 @@ import time
 class App:
     DATE_COLUMN = 'date and time'
     DATA_URL = 'data.csv'
+    path = "/usr/src/appdata/"
     def  __init__(self):
         self.conf = ConfigParser()
         self.conf.read('config.ini')
@@ -64,7 +65,7 @@ class App:
             if(name != ''):
                 options = st.multiselect('get facedata from ',['upload' , 'picamera'])
                 cwd = os.path.abspath(os.path.dirname(__file__))
-                path = os.path.abspath(os.path.join(cwd, "/usr/src/appdata/dataset/"))
+                path = os.path.abspath(os.path.join(cwd,self.path+"/dataset/"))
                 face_detector = cv2.CascadeClassifier('FaceRecognition/haarcascade_frontalface_default.xml')
                 picamera= st.beta_container()
                 if 'picamera' in options:

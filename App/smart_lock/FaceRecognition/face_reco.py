@@ -4,7 +4,7 @@ from PIL import Image
 import os
 import pickle
 class FaceRecognition:
-    path = "data/"
+    path = "/usr/src/appdata/"
     font = cv2.FONT_HERSHEY_SIMPLEX
     name = dict()
     train_data = dict() 

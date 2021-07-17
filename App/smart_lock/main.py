@@ -6,7 +6,7 @@ from configparser import ConfigParser
 import RPi.GPIO as GPIO
 import time
 class LOCK:
-    path = "./data/"
+    path = "/usr/src/appdata/"
     def __init__(self):
         self.running = True
         self.locked = False
