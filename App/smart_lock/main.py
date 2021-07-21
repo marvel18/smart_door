@@ -6,7 +6,7 @@ from configparser import ConfigParser
 import RPi.GPIO as GPIO
 import time
 class LOCK:
-    path = "/usr/src/appdata/"
+    path = "/data/"
     def __init__(self):
         self.running = True
         self.locked = False
@@ -31,9 +31,8 @@ class LOCK:
         except :
             self.df =pd.DataFrame(columns=  ["Date and Time" , "Name" ,"Confidence" , "Temperature" ,"fever" ])
     def run(self):
-        if not self.train():
+        if not self.fr.train():
             print("training error")
-            exit()
         self.start_camera()        
         self.recogonize()
     def stop(self):
@@ -42,12 +41,6 @@ class LOCK:
         self.cam = cv2.VideoCapture(0)
     def stop_camera(self):
         self.cam.release()
-    def train(self):
-        if not self.fr.train():
-            return False
-        self.fr.load()
-        self.fr.stopcam()
-        return True
     def saveData(self,name , confidence):
         if not self.save_data :
             return
@@ -58,9 +51,11 @@ class LOCK:
         self.df.to_csv(self.path+"data.csv")
     def unlock(self):
         self.locked=False
+        print("unlocked")
         GPIO.output(self.lock_pin,GPIO.LOW)
     def lock(self):
         self.locked = True
+        print("locked")
         GPIO.output(self.lock_pin,GPIO.HIGH)
     def recogonize(self):
         print("looking for faces")

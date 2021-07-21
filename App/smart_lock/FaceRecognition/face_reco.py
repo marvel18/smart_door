@@ -4,13 +4,12 @@ from PIL import Image
 import os
 import pickle
 class FaceRecognition:
-    path = "/usr/src/appdata/"
+    path = "/data/"
     font = cv2.FONT_HERSHEY_SIMPLEX
     name = dict()
     train_data = dict() 
     names = dict()
     def __init__(self):
-        self.cam = cv2.VideoCapture(0)
         self.detector = cv2.CascadeClassifier('FaceRecognition/haarcascade_frontalface_default.xml') 
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
     def getImagesAndLabels(self , path):
@@ -47,8 +46,6 @@ class FaceRecognition:
     def load(self):
        self.names = pickle.load(open(self.path+"data.pkl" , "rb"))
        self.recognizer.read(self.path+"train_data.yml")
-    def stopcam(self):
-        self.cam.release()
     def predict(self,img):
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         faces = self.detector.detectMultiScale( 

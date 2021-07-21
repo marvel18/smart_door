@@ -1,2 +1,3 @@
-modprobe v4l2_common
+modprobe bcm2835-v4l2
+modprobe i2c-dev
 python main.py

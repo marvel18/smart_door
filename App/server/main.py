@@ -5,15 +5,17 @@ from configparser import ConfigParser
 import cv2
 from FaceRecognition.face_reco import FaceRecognition
 import os
+import PIL
 import numpy as np
 import time
 class App:
     DATE_COLUMN = 'date and time'
-    DATA_URL = 'data.csv'
-    path = "/usr/src/appdata/"
+    PATH = "/data/"
+    
+    DATA_URL = PATH+'data.csv'
     def  __init__(self):
         self.conf = ConfigParser()
-        self.conf.read(self.path+'config.ini')
+        self.conf.read(self.PATH+'config.ini')
         if(self.authenticate()):
             self.main() 
     @st.cache(suppress_st_warning=True)        
@@ -43,19 +45,19 @@ class App:
         f.table(data[['name' , 'confidence' , 'temperature' , 'fever' , 'date and time']])
         st.button('refresh')    
     def live_cam(self):
+        video = cv2.VideoCapture(0)
         fr = FaceRecognition()
         with st.spinner("Training Model"):
             if(not fr.train()):
-                st.error("Training failed")
-                return
-            fr.stopcam()
-        cam =cv2.VideoCapture(0)    
+                st.error("Training failed")           
         st.balloons()    
         st.subheader('Live Cam')
-        frame = st.image([])
+        frame = st.empty()
         while True:
-            ret  , img = cam.read()
-            name , confidence , img  = fr.predict(img)
+            _,img = video.read()
+            #name , confidence , img  = fr.predict(img)
+            img = cv2.resize(img, (0,0), fx = 0.5, fy = 0.5)
+            #img = cv2.resize(img, (320, 320))
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             frame.image(img)
     def settings(self):
@@ -65,7 +67,7 @@ class App:
             if(name != ''):
                 options = st.multiselect('get facedata from ',['upload' , 'picamera'])
                 cwd = os.path.abspath(os.path.dirname(__file__))
-                path = os.path.abspath(os.path.join(cwd,self.path+"/dataset/"))
+                path = os.path.abspath(os.path.join(cwd,self.PATH+"/dataset/"))
                 face_detector = cv2.CascadeClassifier('FaceRecognition/haarcascade_frontalface_default.xml')
                 picamera= st.beta_container()
                 if 'picamera' in options:
@@ -92,7 +94,7 @@ class App:
                         info.empty()    
                         picamera.success(name + 's face added successfully')
                         frame.image([])
-                        cv2.waitKey(10)       
+                        cv2.waitKey(1)       
                 if 'upload' in options:
                     uploaded_files = st.file_uploader("Choose a image file", type="jpg",accept_multiple_files=True)
                     progress_bar2= st.progress(0)

@@ -1,7 +1,6 @@
-version: '2.1'
+version: '2'
 volumes:
-  shared_folder:
-    external: true
+  resin-data:
 services:
   server:
     build:
@@ -12,20 +11,29 @@ services:
     ports:
       - '8501:8501'
     volumes:
-      - 'shared_folder:/usr/src/appdata'
+      - 'resin-data:/data'
   smart_lock:
     build:
       context: ./App/smart_lock
     restart: on-failure
     privileged: true
     network_mode: host
+    labels:
+      io.balena.features.balena-socket: '1'
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.sysfs: '1'
     volumes:
-      - 'shared_folder:/usr/src/appdata'
+      - 'resin-data:/data'
+
   auto_sanitize:
     build:
       context: ./App/auto_sanitize
     restart: on-failure
     privileged: true
     network_mode: host
+    labels:
+      io.balena.features.balena-socket: '1'
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.sysfs: '1'
     volumes:
-      - 'shared_folder:/usr/src/appdata'
+      - 'resin-data:/data'
