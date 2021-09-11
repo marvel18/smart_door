@@ -89,6 +89,7 @@ class LOCK:
                         self.lock()
                 elif((name != None ) and (name !="unknown")):
                     temp = self.tempOK()
+                    print(name,confidence,temp)
                     if temp:
                         self.saveData(name,confidence,temp)
                         self.unlock()
