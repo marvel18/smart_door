@@ -2,9 +2,10 @@ from configparser import ConfigParser
 import RPi.GPIO as GPIO
 import time
 class Sanitize():
+    path  = "/data/"
     def __init__(self):
         self.conf = ConfigParser()
-        self.conf.read('/data/config.ini')
+        self.conf.read(self.path + 'config.ini')
         self.init_RPi()
     def init_RPi(self):
         self.dist_sensor_conf = self.conf["DISTANCE_SENSOR"]
@@ -37,6 +38,7 @@ class Sanitize():
         time.sleep(2)
     def check_distance(self):
         print("checking distance")
+        print(self.trig_pin,self.echo_pin)
         while(self.running):
             GPIO.output(self.trig_pin, GPIO.HIGH)
             time.sleep(0.00001) 
@@ -48,6 +50,7 @@ class Sanitize():
             pulse_duration = Bounce_back_time - start_time 
             dist = round(pulse_duration * 17150, 2)
             if(dist<=self.min_dist):
+                print(dist)
                 self.sanitize()
             time.sleep(.1)       
         return False          

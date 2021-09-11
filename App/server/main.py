@@ -11,7 +11,6 @@ import time
 class App:
     DATE_COLUMN = 'date and time'
     PATH = "/data/"
-    
     DATA_URL = PATH+'data.csv'
     def  __init__(self):
         self.conf = ConfigParser()

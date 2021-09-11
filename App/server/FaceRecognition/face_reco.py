@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 from PIL import Image
 import os
-import pickle
 class FaceRecognition:
     path = "/data/"
     font = cv2.FONT_HERSHEY_SIMPLEX
