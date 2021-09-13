@@ -10,7 +10,8 @@ import numpy as np
 import time
 class App:
     DATE_COLUMN = 'date and time'
-    PATH = "/data/"
+    #PATH = "/data/"
+    PATH = ""
     DATA_URL = PATH+'data.csv'
     def  __init__(self):
         self.conf = ConfigParser()
@@ -44,7 +45,6 @@ class App:
         f.table(data[['name' , 'confidence' , 'temperature' , 'fever' , 'date and time']])
         st.button('refresh')    
     def live_cam(self):
-        video = cv2.VideoCapture(0)
         fr = FaceRecognition()
         with st.spinner("Training Model"):
             if(not fr.train()):
@@ -52,6 +52,7 @@ class App:
         st.balloons()    
         st.subheader('Live Cam')
         frame = st.empty()
+        video = cv2.VideoCapture(0)
         while True:
             _,img = video.read()
             #name , confidence , img  = fr.predict(img)
@@ -60,7 +61,7 @@ class App:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             frame.image(img)
     def settings(self):
-        add_face_expander = st.beta_expander("Add Face Data", expanded=False)
+        add_face_expander = st.expander(label  = "Add Face Data", expanded=False)
         with add_face_expander :
             name = st.text_input('Enter Name :')
             if(name != ''):
@@ -72,10 +73,11 @@ class App:
                 if 'picamera' in options:
                         info = picamera.info("Look at the camera for some time")
                         frame = picamera.image([])
-                        cam =cv2.VideoCapture(0)
+                        #cam =cv2.VideoCapture(0)
                         count = 0
                         progress_bar1= picamera.progress(0)
                         while count<30:
+                            cam = cv2.VideoCapture("http://localhost:5000/video_feed")
                             ret , img  = cam.read()
                             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                             faces = face_detector.detectMultiScale(gray, 1.5, 5)
@@ -117,7 +119,7 @@ class App:
                     if c!=0 :
                         progress_bar2.empty()            
                         st.success(name + 's facedata uploaded successfully')
-        ce= st.beta_expander("Configurations" , expanded = False)
+        ce= st.expander("Configurations" , expanded = False)
         with ce :
             ce.subheader("FACE RECOGNITION")
             face_config = self.conf['RECO_CONF']
@@ -135,7 +137,7 @@ class App:
             distance_sensor_config['min_dist'] = str(ce.slider('MINIMUM DISTANCE(cm)' , 0 , 100 , int(distance_sensor_config['min_dist'])))
             distance_sensor_config['trig_pin'] = str(ce.number_input('TRIGGER PIN ',value = int(distance_sensor_config['trig_pin'])))
             distance_sensor_config['echo_pin'] = str(ce.number_input('ECHO PIN ',value = int(distance_sensor_config['echo_pin'])))
-        se=st.beta_expander("Security Settings" , expanded = False)
+        se=st.expander("Security Settings" , expanded = False)
         with se :
             login_config = self.conf['LOGIN']
             password = str(se.text_input('Enter Password ',type='password',value = ''))
