@@ -4,6 +4,7 @@ import pandas as pd
 from configparser import ConfigParser
 import cv2
 from FaceRecognition.face_reco import FaceRecognition
+from client import Video_Stream
 import os
 import PIL
 import numpy as np
@@ -45,16 +46,14 @@ class App:
         f.table(data[['name' , 'confidence' , 'temperature' , 'fever' , 'date and time']])
         st.button('refresh')    
     def live_cam(self):
-        fr = FaceRecognition()
-        with st.spinner("Training Model"):
-            if(not fr.train()):
-                st.error("Training failed")           
-        st.balloons()    
+        vid_st = Video_Stream()
+        if not vid_st.connect() :
+            st.error("could not connect to pi")
+            return  
         st.subheader('Live Cam')
         frame = st.empty()
-        video = cv2.VideoCapture(0)
         while True:
-            _,img = video.read()
+            img = vid_st.get_frame()
             #name , confidence , img  = fr.predict(img)
             img = cv2.resize(img, (0,0), fx = 0.5, fy = 0.5)
             #img = cv2.resize(img, (320, 320))

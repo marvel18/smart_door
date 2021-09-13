@@ -7,6 +7,8 @@ from mlx90614 import MLX90614
 from configparser import ConfigParser
 import RPi.GPIO as GPIO
 import time
+import socket, cv2, pickle,struct
+from cam_snap import Stream_Cam
 class LOCK:
     path = "/data/"
     def __init__(self):
@@ -76,31 +78,44 @@ class LOCK:
         return False
     def recogonize(self):
         print("looking for faces")
-        start_time = 0    
-        while(self.running):
+        vid_cam = Stream_Cam()
+        vid_cam.start()
+        start_time = 0
+        while(self.cam.isOpened()):
             ret  , img = self.cam.read()
+            status = ""
             name , confidence , img  = self.fr.predict(img)
             if(GPIO.input(self.lock_in_pin)==1):
                 if(start_time==0):
                     start_time = time.time()
+                    status = "door closed"
                     print("door closed")
                 if(not self.locked):
                     if(time.time() - start_time > 10):
                         self.lock()
+                        status = "door locked"
                         print("locked")
                 elif((name != None ) and (name !="unknown")):
                     print("checking temperature")
+                    cv2.putText(img, "checking temperature", (0,0), self.font, 1, (255,255,255), 2)
+                    vid_cam.send(img)
                     temp = self.tempOK()
                     print(name,confidence,temp)
                     if temp:
                         self.saveData(name,confidence,temp)
                         self.unlock()
+                        status = "door unlocked"
                         start_time = 0
                     else:
                         print("temperature exceeded")
+                        status = "temperature exceeded"
             elif(start_time!=0):
                 start_time = 0
+            cv2.putText(img,status, (0,0), self.font, 1, (255,255,255), 2)
+            vid_cam.send(img)
             cv2.waitKey(1)
+        vid_cam.exit()
+        vid_cam.join()
         return False    
   
 if __name__ == '__main__':
