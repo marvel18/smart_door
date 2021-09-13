@@ -61,7 +61,6 @@ class LOCK:
         GPIO.output(self.lock_pin,GPIO.LOW)
     def lock(self):
         self.locked = True
-        print("locked")
         GPIO.output(self.lock_pin,GPIO.HIGH)
     def tempOK(self):
         for i in range(5):
@@ -84,10 +83,13 @@ class LOCK:
             if(GPIO.input(self.lock_in_pin)==1):
                 if(start_time==0):
                     start_time = time.time()
+                    print("door closed")
                 if(not self.locked):
                     if(time.time() - start_time > 10):
                         self.lock()
+                        print("locked")
                 elif((name != None ) and (name !="unknown")):
+                    print("checking temperature")
                     temp = self.tempOK()
                     print(name,confidence,temp)
                     if temp:
