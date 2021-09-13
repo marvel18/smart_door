@@ -69,15 +69,14 @@ class App:
                 cwd = os.path.abspath(os.path.dirname(__file__))
                 path = os.path.abspath(os.path.join(cwd,self.PATH+"/dataset/"))
                 face_detector = cv2.CascadeClassifier('FaceRecognition/haarcascade_frontalface_default.xml')
-                picamera= st.beta_container()
+                picamera= st.container()
                 if 'picamera' in options:
                         info = picamera.info("Look at the camera for some time")
                         frame = picamera.image([])
-                        #cam =cv2.VideoCapture(0)
+                        cam =cv2.VideoCapture(0)
                         count = 0
                         progress_bar1= picamera.progress(0)
                         while count<30:
-                            cam = cv2.VideoCapture("http://localhost:5000/video_feed")
                             ret , img  = cam.read()
                             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                             faces = face_detector.detectMultiScale(gray, 1.5, 5)
@@ -153,36 +152,7 @@ class App:
             self.conf.write(conf)
                                                                
     def main(self): 
-        st.title("Smart Door")
-        """
-        self.lock_running = LOCK()
-        self.auto_santize = Sanitize()
-        status = self.conf["STATUS"]
-        content,_,_,_=st.sidebar.beta_columns([.5,1,1,1])
-        with content:  
-            running = st.select_slider("FACE_LOCK",['OFF','ON'],status["face_lock"])
-            if running == 'ON':
-                if status["face_lock"] == "OFF":
-                    self.lock_running.start()
-                    status["face_lock"] = "ON"
-            else:
-                self.lock_running.stop()
-                status["face_lock"] = "OFF"
-        content,_,_,_=st.sidebar.beta_columns([.5,1,1,1])
-        with content:  
-            running = st.select_slider("AUTO SANITISE",['OFF','ON'],status["auto_sanitize"])
-            if running == 'ON':
-                if status["auto_sanitize"] == "OFF":
-                    
-                    self.auto_santize.start()
-                    status["auto_sanitize"] = "ON"
-            else:
-                self.auto_sanitize.stop()
-                status["auto_sanitize"] = "OFF"
-                        
-            with open('config.ini' , 'w') as conf :
-                self.conf.write(conf) 
-                """             
+        st.title("Smart Door")         
         nav  = st.sidebar.radio("Navigation" , ["Home" , "Sensor" , "Camera",'Settings'])
         if nav == "Home":
             self.home()
