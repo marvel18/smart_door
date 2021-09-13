@@ -97,7 +97,7 @@ class LOCK:
                         print("locked")
                 elif((name != None ) and (name !="unknown")):
                     print("checking temperature")
-                    cv2.putText(img, "checking temperature", (0,0), self.font, 1, (255,255,255), 2)
+                    cv2.putText(img, "checking temperature", (0,0), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
                     vid_cam.send(img)
                     temp = self.tempOK()
                     print(name,confidence,temp)
@@ -111,7 +111,7 @@ class LOCK:
                         status = "temperature exceeded"
             elif(start_time!=0):
                 start_time = 0
-            cv2.putText(img,status, (0,0), self.font, 1, (255,255,255), 2)
+            cv2.putText(img,status, (0,0), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
             vid_cam.send(img)
             cv2.waitKey(1)
         vid_cam.exit()
